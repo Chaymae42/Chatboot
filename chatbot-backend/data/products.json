@@ -1,0 +1,463 @@
+[
+  {
+    "id": 1,
+    "name": "Lait pasteurisé",
+    "brand": "Salim",
+    "category": "Produits laitiers",
+    "format": "1 L",
+    "price": 7,
+    "stock": 40,
+    "location": "Rayon Produits Laitiers — Allée 3",
+    "description": "Lait pasteurisé demi-écrémé"
+  },
+  {
+    "id": 2,
+    "name": "Lait Centrale",
+    "brand": "Centrale Danone",
+    "category": "Produits laitiers",
+    "format": "1 L",
+    "price": 8,
+    "stock": 50,
+    "location": "Rayon Produits Laitiers — Allée 3",
+    "description": "Lait demi-écrémé"
+  },
+  {
+    "id": 3,
+    "name": "Lait Jaouda",
+    "brand": "Jaouda",
+    "category": "Produits laitiers",
+    "format": "1 L",
+    "price": 7,
+    "stock": 60,
+    "location": "Rayon Produits Laitiers — Allée 3",
+    "description": "Lait demi-écrémé UHT"
+  },
+  {
+    "id": 4,
+    "name": "Yaourt nature",
+    "brand": "Danone",
+    "category": "Produits laitiers",
+    "format": "110 g",
+    "price": 4,
+    "stock": 80,
+    "location": "Rayon Produits Laitiers — Allée 3",
+    "description": "Yaourt nature brassé"
+  },
+  {
+    "id": 5,
+    "name": "Fromage Président",
+    "brand": "Président",
+    "category": "Produits laitiers",
+    "format": "200 g",
+    "price": 20,
+    "stock": 25,
+    "location": "Rayon Produits Laitiers — Allée 3",
+    "description": "Fromage à pâte molle"
+  },
+  {
+    "id": 6,
+    "name": "Fromage La Vache Qui Rit",
+    "brand": "La Vache Qui Rit",
+    "category": "Produits laitiers",
+    "format": "8 portions 120 g",
+    "price": 16,
+    "stock": 55,
+    "location": "Rayon Produits Laitiers — Allée 3",
+    "description": "Fromage fondu en portions"
+  },
+  {
+    "id": 7,
+    "name": "Fromage Edam",
+    "brand": "Edam",
+    "category": "Produits laitiers",
+    "format": "250 g",
+    "price": 24,
+    "stock": 18,
+    "location": "Rayon Produits Laitiers — Allée 3",
+    "description": "Fromage à pâte pressée"
+  },
+
+  {
+    "id": 8,
+    "name": "Pain complet",
+    "brand": "Boulangerie maison",
+    "category": "Boulangerie",
+    "format": "400 g",
+    "price": 4,
+    "stock": 30,
+    "location": "Rayon Boulangerie — Allée 1",
+    "description": "Pain complet frais"
+  },
+  {
+    "id": 9,
+    "name": "Pain de mie complet",
+    "brand": "Harrys",
+    "category": "Boulangerie",
+    "format": "500 g",
+    "price": 12,
+    "stock": 22,
+    "location": "Rayon Boulangerie — Allée 1",
+    "description": "Pain de mie complet en tranches"
+  },
+
+  {
+    "id": 10,
+    "name": "Nutella",
+    "brand": "Ferrero",
+    "category": "Petit déjeuner",
+    "format": "1 kg",
+    "price": 65,
+    "stock": 0,
+    "restock_days": 3,
+    "location": "Rayon Petit Déjeuner — Allée 5",
+    "description": "Pâte à tartiner chocolat noisette"
+  },
+  {
+    "id": 11,
+    "name": "Nutella",
+    "brand": "Ferrero",
+    "category": "Petit déjeuner",
+    "format": "750 g",
+    "price": 38,
+    "stock": 20,
+    "location": "Rayon Petit Déjeuner — Allée 5",
+    "description": "Pâte à tartiner goût chocolat noisette"
+  },
+  {
+    "id": 12,
+    "name": "Pâte à tartiner Amlou",
+    "brand": "Produit local",
+    "category": "Petit déjeuner",
+    "format": "500 g",
+    "price": 45,
+    "stock": 15,
+    "location": "Rayon Petit Déjeuner — Allée 5",
+    "description": "Mélange amandes, miel et huile d'argan"
+  },
+  {
+    "id": 13,
+    "name": "Pâte à tartiner El Mordjene",
+    "brand": "El Mordjene",
+    "category": "Petit déjeuner",
+    "format": "700 g",
+    "price": 42,
+    "stock": 12,
+    "location": "Rayon Petit Déjeuner — Allée 5",
+    "description": "Pâte à tartiner saveur noisette"
+  },
+  {
+    "id": 14,
+    "name": "Pâte à tartiner Kinder",
+    "brand": "Kinder",
+    "category": "Petit déjeuner",
+    "format": "300 g",
+    "price": 30,
+    "stock": 18,
+    "location": "Rayon Petit Déjeuner — Allée 5",
+    "description": "Pâte à tartiner au lait et noisettes"
+  },
+  {
+    "id": 15,
+    "name": "Confiture d'abricot",
+    "brand": "Aïcha",
+    "category": "Petit déjeuner",
+    "format": "430 g",
+    "price": 18,
+    "stock": 40,
+    "location": "Rayon Petit Déjeuner — Allée 5",
+    "description": "Confiture d'abricot"
+  },
+  {
+    "id": 16,
+    "name": "Céréales Corn Flakes",
+    "brand": "Kellogg's",
+    "category": "Petit déjeuner",
+    "format": "500 g",
+    "price": 42,
+    "stock": 25,
+    "location": "Rayon Petit Déjeuner — Allée 5",
+    "description": "Céréales pétales de maïs"
+  },
+
+  {
+    "id": 17,
+    "name": "Café Nescafé",
+    "brand": "Nescafé",
+    "category": "Boissons chaudes",
+    "format": "200 g",
+    "price": 35,
+    "stock": 30,
+    "promo": "Achetez 2, payez 55 DH au lieu de 70 DH",
+    "location": "Rayon Boissons Chaudes — Allée 4",
+    "description": "Café soluble"
+  },
+  {
+    "id": 18,
+    "name": "Café Asta",
+    "brand": "Asta",
+    "category": "Boissons chaudes",
+    "format": "200 g",
+    "price": 28,
+    "stock": 22,
+    "location": "Rayon Boissons Chaudes — Allée 4",
+    "description": "Café soluble"
+  },
+  {
+    "id": 19,
+    "name": "Café Bialetti",
+    "brand": "Bialetti",
+    "category": "Boissons chaudes",
+    "format": "250 g",
+    "price": 60,
+    "stock": 10,
+    "location": "Rayon Boissons Chaudes — Allée 4",
+    "description": "Café moulu pur arabica"
+  },
+  {
+    "id": 20,
+    "name": "Thé vert",
+    "brand": "Sultan",
+    "category": "Boissons chaudes",
+    "format": "200 g",
+    "price": 20,
+    "stock": 50,
+    "location": "Rayon Boissons Chaudes — Allée 4",
+    "description": "Thé vert de Chine"
+  },
+  {
+    "id": 21,
+    "name": "Chocolat chaud Nesquik",
+    "brand": "Nesquik",
+    "category": "Boissons chaudes",
+    "format": "400 g",
+    "price": 35,
+    "stock": 24,
+    "location": "Rayon Boissons Chaudes — Allée 4",
+    "description": "Poudre cacaotée"
+  },
+
+  {
+    "id": 22,
+    "name": "Jus d'orange Valencia",
+    "brand": "Valencia",
+    "category": "Boissons",
+    "format": "1 L",
+    "price": 14,
+    "stock": 35,
+    "location": "Rayon Boissons — Allée 4",
+    "description": "Jus d'orange"
+  },
+  {
+    "id": 23,
+    "name": "Jus d'orange Marrakech",
+    "brand": "Marrakech",
+    "category": "Boissons",
+    "format": "1 L",
+    "price": 12,
+    "stock": 30,
+    "location": "Rayon Boissons — Allée 4",
+    "description": "Jus d'orange"
+  },
+  {
+    "id": 24,
+    "name": "Jus d'orange Al Boustane",
+    "brand": "Al Boustane",
+    "category": "Boissons",
+    "format": "1 L",
+    "price": 13,
+    "stock": 28,
+    "location": "Rayon Boissons — Allée 4",
+    "description": "Jus d'orange"
+  },
+  {
+    "id": 25,
+    "name": "Coca Cola",
+    "brand": "Coca-Cola",
+    "category": "Boissons",
+    "format": "1.5 L",
+    "price": 12,
+    "stock": 35,
+    "location": "Rayon Boissons — Allée 4",
+    "description": "Boisson gazeuse au cola"
+  },
+  {
+    "id": 26,
+    "name": "Pepsi",
+    "brand": "Pepsi",
+    "category": "Boissons",
+    "format": "1.5 L",
+    "price": 11,
+    "stock": 40,
+    "location": "Rayon Boissons — Allée 4",
+    "description": "Boisson gazeuse au cola"
+  },
+  {
+    "id": 27,
+    "name": "Eau Sidi Ali",
+    "brand": "Sidi Ali",
+    "category": "Boissons",
+    "format": "1.5 L",
+    "price": 6,
+    "stock": 100,
+    "location": "Rayon Boissons — Allée 4",
+    "description": "Eau minérale naturelle"
+  },
+  {
+    "id": 28,
+    "name": "Eau Oulmès",
+    "brand": "Oulmès",
+    "category": "Boissons",
+    "format": "1 L",
+    "price": 8,
+    "stock": 70,
+    "location": "Rayon Boissons — Allée 4",
+    "description": "Eau minérale gazeuse"
+  },
+
+  {
+    "id": 29,
+    "name": "Riz Basmati",
+    "brand": "Tilda",
+    "category": "Alimentation",
+    "format": "1 kg",
+    "price": 25,
+    "stock": 40,
+    "location": "Rayon Épicerie — Allée 6",
+    "description": "Riz basmati premium"
+  },
+  {
+    "id": 30,
+    "name": "Riz Rond",
+    "brand": "Cigogne",
+    "category": "Alimentation",
+    "format": "1 kg",
+    "price": 14,
+    "stock": 50,
+    "location": "Rayon Épicerie — Allée 6",
+    "description": "Riz rond classique"
+  },
+  {
+    "id": 31,
+    "name": "Pâtes Penne",
+    "brand": "Barilla",
+    "category": "Alimentation",
+    "format": "500 g",
+    "price": 10,
+    "stock": 45,
+    "location": "Rayon Épicerie — Allée 6",
+    "description": "Pâtes penne rigate"
+  },
+  {
+    "id": 32,
+    "name": "Spaghetti",
+    "brand": "Panzani",
+    "category": "Alimentation",
+    "format": "500 g",
+    "price": 9,
+    "stock": 48,
+    "location": "Rayon Épicerie — Allée 6",
+    "description": "Spaghetti"
+  },
+  {
+    "id": 33,
+    "name": "Sucre granulé",
+    "brand": "Cosumar",
+    "category": "Alimentation",
+    "format": "1 kg",
+    "price": 9,
+    "stock": 60,
+    "location": "Rayon Épicerie — Allée 6",
+    "description": "Sucre blanc granulé"
+  },
+  {
+    "id": 34,
+    "name": "Farine",
+    "brand": "Tria",
+    "category": "Alimentation",
+    "format": "1 kg",
+    "price": 7,
+    "stock": 65,
+    "location": "Rayon Épicerie — Allée 6",
+    "description": "Farine de blé tout usage"
+  },
+
+  {
+    "id": 35,
+    "name": "Huile de tournesol",
+    "brand": "Lesieur",
+    "category": "Cuisine",
+    "format": "1 L",
+    "price": 22,
+    "stock": 25,
+    "location": "Rayon Épicerie — Allée 6",
+    "description": "Huile de tournesol"
+  },
+  {
+    "id": 36,
+    "name": "Huile de table",
+    "brand": "Afia",
+    "category": "Cuisine",
+    "format": "1 L",
+    "price": 20,
+    "stock": 30,
+    "location": "Rayon Épicerie — Allée 6",
+    "description": "Huile de table végétale"
+  },
+  {
+    "id": 37,
+    "name": "Huile d'olive",
+    "brand": "Mabrouka",
+    "category": "Cuisine",
+    "format": "1 L",
+    "price": 75,
+    "stock": 18,
+    "location": "Rayon Épicerie — Allée 6",
+    "description": "Huile d'olive vierge extra"
+  },
+
+  {
+    "id": 38,
+    "name": "Pommes",
+    "brand": "Maroc",
+    "category": "Fruits et Légumes",
+    "format": "au kg",
+    "price": 3,
+    "stock": 120,
+    "location": "Rayon Fruits et Légumes — Allée 7",
+    "description": "Pommes d'origine Maroc, prix au kg"
+  },
+  {
+    "id": 39,
+    "name": "Bananes",
+    "brand": "Maroc",
+    "category": "Fruits et Légumes",
+    "format": "au kg",
+    "price": 9,
+    "stock": 90,
+    "location": "Rayon Fruits et Légumes — Allée 7",
+    "description": "Bananes, prix au kg"
+  },
+  {
+    "id": 40,
+    "name": "Tomates",
+    "brand": "Maroc",
+    "category": "Fruits et Légumes",
+    "format": "au kg",
+    "price": 5,
+    "stock": 100,
+    "location": "Rayon Fruits et Légumes — Allée 7",
+    "description": "Tomates fraîches, prix au kg"
+  },
+  {
+    "id": 41,
+    "name": "Pastèque",
+    "brand": "Maroc",
+    "category": "Fruits et Légumes",
+    "format": "à la pièce",
+    "price": 20,
+    "stock": 0,
+    "seasonal": "Produit saisonnier disponible principalement en été",
+    "location": "Rayon Fruits et Légumes — Allée 7",
+    "description": "Pastèque, produit saisonnier"
+  }
+]
