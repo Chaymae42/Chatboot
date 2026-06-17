@@ -1,3 +1,6 @@
+import re
+import json
+
 from langchain_qdrant import QdrantVectorStore
 from langchain_huggingface import HuggingFaceEmbeddings
 
@@ -69,6 +72,46 @@ def format_history(history):
     return "\n".join(lines) if lines else "(début de la conversation)"
 
 
+def extract_cart_item(text):
+    """Extrait la balise [[CART]]...[[/CART]] du texte de l'assistant.
+    Retourne (texte_nettoyé, cart_item ou None)."""
+    if not text:
+        return text, None
+
+    match = re.search(r"\[\[CART\]\](.*?)\[\[/CART\]\]", text, re.DOTALL)
+
+    if not match:
+        return text.strip(), None
+
+    cart_item = None
+    raw = match.group(1).strip()
+
+    try:
+        data = json.loads(raw)
+        # Normalisation des champs numériques
+        quantite = int(float(data.get("quantite", 0)))
+        prix = float(data.get("prix_unitaire", 0))
+        cart_item = {
+            "produit": str(data.get("produit", "")).strip(),
+            "marque": str(data.get("marque", "")).strip(),
+            "format": str(data.get("format", "")).strip(),
+            "quantite": quantite,
+            "prix_unitaire": prix,
+        }
+        # Un article valide doit avoir un nom et une quantité positive
+        if not cart_item["produit"] or cart_item["quantite"] <= 0:
+            cart_item = None
+    except (ValueError, TypeError):
+        cart_item = None
+
+    # On retire la balise du texte affiché au client
+    clean_text = re.sub(
+        r"\[\[CART\]\].*?\[\[/CART\]\]", "", text, flags=re.DOTALL
+    ).strip()
+
+    return clean_text, cart_item
+
+
 def build_search_query(question, history):
     """Construit la requête de recherche à partir des derniers messages du client.
     Utile car une réponse courte (ex: 'Salim') n'a pas assez de sens seule."""
@@ -118,11 +161,19 @@ Tu DOIS suivre exactement ce mode de fonctionnement :
 - S'il existe une promotion (champ promo), ajoute une ligne "• Offre : ...".
 - Termine TOUJOURS en demandant : "Quelle quantité souhaitez-vous ?"
 
-3) CONFIRMER LA QUANTITÉ
-- Quand le client donne une quantité, confirme simplement :
+3) CONFIRMER LA QUANTITÉ (ET AJOUTER AU PANIER)
+- Quand le client donne une quantité pour un produit disponible, confirme :
   "Très bien. Vous avez choisi {quantité} {produit} {format}."
 - Si une promotion s'applique à cette quantité, mentionne-la
   (ex: "Vous bénéficiez de la promotion : 2 cafés pour 55 DH").
+- DANS CE CAS UNIQUEMENT (un achat est confirmé avec une quantité précise),
+  tu DOIS ajouter, tout à la fin de ta réponse, une balise technique au format
+  EXACT suivant, sur une seule ligne, contenant du JSON valide :
+  [[CART]]{"produit": "...", "marque": "...", "format": "...", "quantite": 0, "prix_unitaire": 0}[[/CART]]
+  - "quantite" = la quantité demandée par le client (nombre entier).
+  - "prix_unitaire" = le prix unitaire du produit en DH (nombre, sans texte).
+  - N'ajoute cette balise QUE si un produit est réellement choisi avec sa quantité.
+  - N'explique JAMAIS cette balise au client, ne la commente pas.
 
 4) RUPTURE DE STOCK (stock = 0 avec restock_days)
 - Indique que le produit est en rupture de stock et sa date de retour estimée.
@@ -190,4 +241,9 @@ ci-dessus et en t'appuyant uniquement sur le contexte.
     else:  # "local" ou valeur par défaut
         response = ask_llama(prompt)
 
-    return response
+    clean_text, cart_item = extract_cart_item(response)
+
+    return {
+        "response": clean_text,
+        "cart_item": cart_item,
+    }

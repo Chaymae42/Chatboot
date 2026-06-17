@@ -5,6 +5,8 @@ function Chat({ user, onLogout }) {
   const [message, setMessage] = useState("");
   const [model, setModel] = useState("deepseek");
   const [loading, setLoading] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [showCart, setShowCart] = useState(false);
   const [messages, setMessages] = useState([
     {
       role: "bot",
@@ -13,6 +15,29 @@ function Chat({ user, onLogout }) {
   ]);
 
   const chatEndRef = useRef(null);
+
+  // Ajoute un article au panier (fusionne si le produit existe déjà)
+  const addToCart = (item) => {
+    setCart((prev) => {
+      const key = `${item.produit}|${item.format}`;
+      const existing = prev.find(
+        (p) => `${p.produit}|${p.format}` === key
+      );
+      if (existing) {
+        return prev.map((p) =>
+          `${p.produit}|${p.format}` === key
+            ? { ...p, quantite: p.quantite + item.quantite }
+            : p
+        );
+      }
+      return [...prev, item];
+    });
+  };
+
+  const cartTotal = cart.reduce(
+    (sum, item) => sum + item.quantite * item.prix_unitaire,
+    0
+  );
 
   // Scroll automatique vers le dernier message
   useEffect(() => {
@@ -35,6 +60,11 @@ function Chat({ user, onLogout }) {
       const data = await sendRagChat(text, model, history);
       const botText = data.response || data.error || "Aucune réponse reçue.";
       setMessages((prev) => [...prev, { role: "bot", text: botText }]);
+
+      // Ajout automatique au panier si l'assistant a confirmé un achat
+      if (data.cart_item) {
+        addToCart(data.cart_item);
+      }
     } catch (err) {
       setMessages((prev) => [
         ...prev,
@@ -66,14 +96,15 @@ function Chat({ user, onLogout }) {
 
         <button
           className="new-chat"
-          onClick={() =>
+          onClick={() => {
             setMessages([
               {
                 role: "bot",
                 text: "Nouvelle conversation 👋 Posez votre question.",
               },
-            ])
-          }
+            ]);
+            setCart([]);
+          }}
         >
           + Nouveau Chat
         </button>
@@ -103,15 +134,82 @@ function Chat({ user, onLogout }) {
         {/* Header */}
         <div className="header">
           <h2>Assistant IA</h2>
-          <div className="profile">
-            <img
-              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                user || "User"
-              )}&background=005BAC&color=fff`}
-              alt="profile"
-            />
-            <span>{user || "Utilisateur"}</span>
+
+          <div className="header-right">
+            {/* Icône panier avec badge compteur */}
+            <button
+              className="cart-button"
+              onClick={() => setShowCart((v) => !v)}
+              title="Voir le panier"
+            >
+              <span className="cart-icon">🛒</span>
+              {cart.length > 0 && (
+                <span className="cart-badge">{cart.length}</span>
+              )}
+            </button>
+
+            <div className="profile">
+              <img
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  user || "User"
+                )}&background=005BAC&color=fff`}
+                alt="profile"
+              />
+              <span>{user || "Utilisateur"}</span>
+            </div>
           </div>
+
+          {/* Panneau du panier */}
+          {showCart && (
+            <div className="cart-panel">
+              <div className="cart-panel-header">
+                <strong>Mon panier</strong>
+                <button
+                  className="cart-close"
+                  onClick={() => setShowCart(false)}
+                >
+                  ×
+                </button>
+              </div>
+
+              {cart.length === 0 ? (
+                <p className="cart-empty">Votre panier est vide.</p>
+              ) : (
+                <>
+                  <div className="cart-items">
+                    {cart.map((item, i) => (
+                      <div key={i} className="cart-row">
+                        <div className="cart-row-info">
+                          <span className="cart-row-name">
+                            {item.produit}
+                            {item.format ? ` (${item.format})` : ""}
+                          </span>
+                          <span className="cart-row-detail">
+                            {item.quantite} × {item.prix_unitaire} DH
+                          </span>
+                        </div>
+                        <span className="cart-row-total">
+                          {item.quantite * item.prix_unitaire} DH
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="cart-total">
+                    <span>Total</span>
+                    <span>{cartTotal} DH</span>
+                  </div>
+
+                  <button
+                    className="cart-clear"
+                    onClick={() => setCart([])}
+                  >
+                    Vider le panier
+                  </button>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Chat */}

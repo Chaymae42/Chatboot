@@ -25,7 +25,7 @@ def rag_chat(data: ChatRequest):
 
     history = [m.dict() for m in data.history] if data.history else []
 
-    answer = ask_rag(
+    result = ask_rag(
         data.message,
         data.model,
         history
@@ -33,5 +33,6 @@ def rag_chat(data: ChatRequest):
 
     return {
         "question": data.message,
-        "response": answer
+        "response": result["response"],
+        "cart_item": result["cart_item"],
     }
