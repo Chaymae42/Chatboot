@@ -1,5 +1,17 @@
 import { useState, useRef, useEffect } from "react";
-import { sendRagChat } from "./api";
+import {
+  sendRagChat,
+  createConversation,
+  listConversations,
+  getConversation,
+  addMessage,
+  deleteConversation,
+} from "./api";
+
+const WELCOME = {
+  role: "bot",
+  text: "Bonjour 👋 Je suis votre assistant IA. Comment puis-je vous aider ?",
+};
 
 function Chat({ user, onLogout }) {
   const [message, setMessage] = useState("");
@@ -7,14 +19,66 @@ function Chat({ user, onLogout }) {
   const [loading, setLoading] = useState(false);
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      role: "bot",
-      text: "Bonjour 👋 Je suis votre assistant IA. Comment puis-je vous aider ?",
-    },
-  ]);
+  const [conversations, setConversations] = useState([]);
+  const [currentConvId, setCurrentConvId] = useState(null);
+  const [messages, setMessages] = useState([WELCOME]);
 
   const chatEndRef = useRef(null);
+
+  // Charge la liste des conversations de l'utilisateur au démarrage
+  useEffect(() => {
+    let active = true;
+    listConversations(user)
+      .then((list) => {
+        if (active) setConversations(list);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [user]);
+
+  const refreshConversations = () => {
+    listConversations(user)
+      .then(setConversations)
+      .catch(() => {});
+  };
+
+  // Démarre une nouvelle conversation (sans conversation enregistrée pour l'instant)
+  const startNewChat = () => {
+    setMessages([WELCOME]);
+    setCart([]);
+    setCurrentConvId(null);
+  };
+
+  // Charge une conversation existante depuis la base
+  const loadConversation = async (id) => {
+    try {
+      const conv = await getConversation(id);
+      const msgs = (conv.messages || []).map((m) => ({
+        role: m.role,
+        text: m.text,
+      }));
+      setMessages(msgs.length ? msgs : [WELCOME]);
+      setCurrentConvId(id);
+      setCart([]);
+      setShowCart(false);
+    } catch (e) {
+      // ignore
+    }
+  };
+
+  // Supprime une conversation
+  const removeConversation = async (id, e) => {
+    e.stopPropagation();
+    try {
+      await deleteConversation(id);
+      if (id === currentConvId) startNewChat();
+      refreshConversations();
+    } catch (err) {
+      // ignore
+    }
+  };
 
   // Ajoute un article au panier (fusionne si le produit existe déjà)
   const addToCart = (item) => {
@@ -39,6 +103,11 @@ function Chat({ user, onLogout }) {
     0
   );
 
+  const formatNumber = (value) =>
+    Number(value).toLocaleString("fr-FR", {
+      maximumFractionDigits: 2,
+    });
+
   // Scroll automatique vers le dernier message
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -57,6 +126,26 @@ function Chat({ user, onLogout }) {
     setLoading(true);
 
     try {
+      // On s'assure qu'une conversation existe en base pour la sauvegarde
+      let convId = currentConvId;
+      if (!convId) {
+        try {
+          const conv = await createConversation(user, text.slice(0, 50));
+          convId = conv.id;
+          setCurrentConvId(convId);
+        } catch (e) {
+          // la sauvegarde échoue mais le chat continue
+        }
+      }
+
+      if (convId) {
+        try {
+          await addMessage(convId, "user", text);
+        } catch (e) {
+          // ignore
+        }
+      }
+
       const data = await sendRagChat(text, model, history);
       const botText = data.response || data.error || "Aucune réponse reçue.";
       setMessages((prev) => [...prev, { role: "bot", text: botText }]);
@@ -64,6 +153,16 @@ function Chat({ user, onLogout }) {
       // Ajout automatique au panier si l'assistant a confirmé un achat
       if (data.cart_item) {
         addToCart(data.cart_item);
+      }
+
+      // Sauvegarde de la réponse + rafraîchissement de la liste
+      if (convId) {
+        try {
+          await addMessage(convId, "bot", botText);
+        } catch (e) {
+          // ignore
+        }
+        refreshConversations();
       }
     } catch (err) {
       setMessages((prev) => [
@@ -94,18 +193,7 @@ function Chat({ user, onLogout }) {
           Chatbot IA
         </div>
 
-        <button
-          className="new-chat"
-          onClick={() => {
-            setMessages([
-              {
-                role: "bot",
-                text: "Nouvelle conversation 👋 Posez votre question.",
-              },
-            ]);
-            setCart([]);
-          }}
-        >
+        <button className="new-chat" onClick={startNewChat}>
           + Nouveau Chat
         </button>
 
@@ -119,9 +207,28 @@ function Chat({ user, onLogout }) {
         </div>
 
         <div className="history">
-          <div className="history-item">Conversation 1</div>
-          <div className="history-item">Conversation 2</div>
-          <div className="history-item">Conversation 3</div>
+          {conversations.length === 0 ? (
+            <div className="history-empty">Aucune conversation</div>
+          ) : (
+            conversations.map((c) => (
+              <div
+                key={c.id}
+                className={`history-item ${
+                  c.id === currentConvId ? "active" : ""
+                }`}
+                onClick={() => loadConversation(c.id)}
+              >
+                <span className="history-item-title">{c.title}</span>
+                <button
+                  className="history-delete"
+                  onClick={(e) => removeConversation(c.id, e)}
+                  title="Supprimer"
+                >
+                  ×
+                </button>
+              </div>
+            ))
+          )}
         </div>
 
         <button className="logout-btn" onClick={onLogout}>
@@ -185,11 +292,15 @@ function Chat({ user, onLogout }) {
                             {item.format ? ` (${item.format})` : ""}
                           </span>
                           <span className="cart-row-detail">
-                            {item.quantite} × {item.prix_unitaire} DH
+                            {formatNumber(item.quantite)} ×{" "}
+                            {formatNumber(item.prix_unitaire)} DH
                           </span>
                         </div>
                         <span className="cart-row-total">
-                          {item.quantite * item.prix_unitaire} DH
+                          {formatNumber(
+                            item.quantite * item.prix_unitaire
+                          )}{" "}
+                          DH
                         </span>
                       </div>
                     ))}
@@ -197,7 +308,7 @@ function Chat({ user, onLogout }) {
 
                   <div className="cart-total">
                     <span>Total</span>
-                    <span>{cartTotal} DH</span>
+                    <span>{formatNumber(cartTotal)} DH</span>
                   </div>
 
                   <button

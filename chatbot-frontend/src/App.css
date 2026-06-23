@@ -324,10 +324,50 @@ body {
   cursor: pointer;
   font-size: 14px;
   transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .history-item:hover {
   background: rgba(255, 255, 255, 0.22);
+}
+
+.history-item.active {
+  background: rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+}
+
+.history-item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.history-delete {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.history-delete:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.history-empty {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  text-align: center;
+  padding: 16px 0;
 }
 
 .logout-btn {

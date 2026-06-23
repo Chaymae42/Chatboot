@@ -3,6 +3,7 @@ from database import engine, Base
 from routes import auth
 from routes import chat
 from routes import rag_chat
+from routes import history
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
@@ -23,3 +24,5 @@ app.include_router(auth.router)
 app.include_router(chat.router)
 
 app.include_router(rag_chat.router)
+
+app.include_router(history.router)
